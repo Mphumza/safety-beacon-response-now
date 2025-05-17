@@ -23,35 +23,35 @@ const ContactForm: React.FC<ContactFormProps> = ({
 }) => {
   return (
     <div className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="name">Your Name</Label>
+      <div className="space-y-1">
+        <Label htmlFor="name">Name</Label>
         <Input
           id="name"
-          placeholder="Enter your name"
+          placeholder="Your name"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
       </div>
       
-      <div className="space-y-2">
-        <Label htmlFor="phone">Phone Number</Label>
+      <div className="space-y-1">
+        <Label htmlFor="phone">Phone</Label>
         <Input
           id="phone"
           type="tel"
-          placeholder="Enter your phone number"
+          placeholder="Your phone number"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
         />
       </div>
       
-      <div className="space-y-2">
-        <Label htmlFor="info">Additional Information</Label>
+      <div className="space-y-1">
+        <Label htmlFor="info">Emergency Details</Label>
         <Textarea
           id="info"
-          placeholder="Describe your emergency or situation"
+          placeholder="Describe your emergency"
           value={additionalInfo}
           onChange={(e) => setAdditionalInfo(e.target.value)}
-          rows={3}
+          rows={2}
         />
       </div>
     </div>

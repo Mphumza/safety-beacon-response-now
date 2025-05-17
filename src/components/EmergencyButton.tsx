@@ -20,18 +20,15 @@ const EmergencyButton: React.FC<EmergencyButtonProps> = ({
     <button
       onClick={onClick}
       className={cn(
-        "relative flex flex-col items-center justify-center w-full p-8 rounded-xl shadow-lg transition-all transform active:scale-95",
+        "relative flex flex-col items-center justify-center w-full p-6 rounded-xl shadow-lg transition-all",
         isPolice ? "bg-emergency-police text-white" : "bg-emergency-hospital text-white",
-        "hover:brightness-110 animate-pulse-emergency",
+        "hover:brightness-110",
         className
       )}
     >
-      <div className="absolute top-3 right-3">
-        {isPolice ? <AlertTriangle size={24} /> : <Phone size={24} />}
-      </div>
-      <div className="text-4xl font-bold mb-2">{isPolice ? "Police" : "Hospital"}</div>
-      <div className="text-sm opacity-90">
-        {isPolice ? "Emergency Response" : "Medical Assistance"}
+      <div className="flex items-center gap-2 mb-2">
+        {isPolice ? <AlertTriangle size={28} /> : <Phone size={28} />}
+        <div className="text-3xl font-bold">{isPolice ? "POLICE" : "HOSPITAL"}</div>
       </div>
     </button>
   );

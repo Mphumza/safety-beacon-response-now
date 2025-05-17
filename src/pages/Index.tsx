@@ -1,14 +1,13 @@
 
 import React, { useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import EmergencyButton from "@/components/EmergencyButton";
 import EmergencyConfirmationDialog from "@/components/EmergencyConfirmationDialog";
 import ContactForm from "@/components/ContactForm";
 import Header from "@/components/Header";
 import { getCurrentLocation } from "@/services/locationService";
 import { sendEmergencyAlert } from "@/services/emergencyService";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 const Index = () => {
   const { toast } = useToast();
@@ -73,9 +72,7 @@ const Index = () => {
         <Header />
         
         <main className="space-y-6 my-6">
-          <h2 className="text-2xl font-semibold text-center">Emergency Response</h2>
-          
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4">
             <EmergencyButton 
               type="police" 
               onClick={() => handleEmergencyButtonClick("police")} 
@@ -87,10 +84,7 @@ const Index = () => {
           </div>
           
           <Card>
-            <CardHeader className="pb-2">
-              <h3 className="text-lg font-medium">Your Contact Information</h3>
-            </CardHeader>
-            <CardContent>
+            <CardContent className="pt-4">
               <ContactForm
                 name={name}
                 setName={setName}
@@ -102,8 +96,8 @@ const Index = () => {
             </CardContent>
           </Card>
           
-          <div className="text-sm text-gray-500 text-center">
-            This application simulates emergency services. In a real emergency, call your local emergency number.
+          <div className="text-sm text-center text-gray-500">
+            This is an emergency SOS application simulation.
           </div>
         </main>
       </div>
