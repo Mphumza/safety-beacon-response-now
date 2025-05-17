@@ -16,6 +16,7 @@ interface EmergencyConfirmationDialogProps {
   onOpenChange: (open: boolean) => void;
   type: "police" | "hospital";
   onConfirm: () => void;
+  isLoading?: boolean;
 }
 
 const EmergencyConfirmationDialog: React.FC<EmergencyConfirmationDialogProps> = ({
@@ -23,6 +24,7 @@ const EmergencyConfirmationDialog: React.FC<EmergencyConfirmationDialogProps> = 
   onOpenChange,
   type,
   onConfirm,
+  isLoading = false,
 }) => {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
@@ -34,11 +36,11 @@ const EmergencyConfirmationDialog: React.FC<EmergencyConfirmationDialogProps> = 
           <AlertDialogDescription className="text-center">
             Are you sure you want to request{" "}
             {type === "police" ? "police assistance" : "medical assistance"}?
-            This will send your location and contact information to emergency services.
+            This will send your location and emergency contact information to emergency services.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="flex flex-col gap-2 sm:flex-row">
-          <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
+          <AlertDialogCancel className="w-full sm:w-auto" disabled={isLoading}>Cancel</AlertDialogCancel>
           <AlertDialogAction
             className={`w-full sm:w-auto ${
               type === "police"
@@ -46,8 +48,9 @@ const EmergencyConfirmationDialog: React.FC<EmergencyConfirmationDialogProps> = 
                 : "bg-emergency-hospital hover:bg-blue-700"
             }`}
             onClick={onConfirm}
+            disabled={isLoading}
           >
-            Yes, Send Alert
+            {isLoading ? "Sending..." : "Yes, Send Alert"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

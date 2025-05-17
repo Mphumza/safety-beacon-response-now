@@ -1,9 +1,9 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import EmergencyButton from "@/components/EmergencyButton";
 import EmergencyConfirmationDialog from "@/components/EmergencyConfirmationDialog";
-import ContactForm from "@/components/ContactForm";
+import EmergencyContactSetup from "@/components/EmergencyContactSetup";
 import Header from "@/components/Header";
 import { getCurrentLocation } from "@/services/locationService";
 import { sendEmergencyAlert } from "@/services/emergencyService";
@@ -11,12 +11,29 @@ import { Card, CardContent } from "@/components/ui/card";
 
 const Index = () => {
   const { toast } = useToast();
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [additionalInfo, setAdditionalInfo] = useState("");
   const [emergencyType, setEmergencyType] = useState<"police" | "hospital" | null>(null);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [emergencyContact, setEmergencyContact] = useState<{ name: string; phone: string } | null>(null);
+
+  // Load emergency contact from localStorage on component mount
+  useEffect(() => {
+    const savedContact = localStorage.getItem("emergencyContact");
+    if (savedContact) {
+      setEmergencyContact(JSON.parse(savedContact));
+    }
+  }, []);
+
+  const saveEmergencyContact = (name: string, phone: string) => {
+    const contact = { name, phone };
+    setEmergencyContact(contact);
+    localStorage.setItem("emergencyContact", JSON.stringify(contact));
+    
+    toast({
+      title: "Emergency Contact Saved",
+      description: `${name} will be notified during emergencies.`,
+    });
+  };
 
   const handleEmergencyButtonClick = (type: "police" | "hospital") => {
     setEmergencyType(type);
@@ -41,9 +58,9 @@ const Index = () => {
       
       const response = await sendEmergencyAlert({
         type: emergencyType,
-        name,
-        phone,
-        additionalInfo,
+        name: emergencyContact?.name || "Anonymous",
+        phone: emergencyContact?.phone || "",
+        additionalInfo: `Emergency SOS triggered. ${emergencyContact ? 'Emergency contact is ' + emergencyContact.name + ' (' + emergencyContact.phone + ')' : 'No emergency contact set.'}`,
         location: locationData,
       });
       
@@ -85,13 +102,9 @@ const Index = () => {
           
           <Card>
             <CardContent className="pt-4">
-              <ContactForm
-                name={name}
-                setName={setName}
-                phone={phone}
-                setPhone={setPhone}
-                additionalInfo={additionalInfo}
-                setAdditionalInfo={setAdditionalInfo}
+              <EmergencyContactSetup 
+                onSave={saveEmergencyContact}
+                emergencyContact={emergencyContact}
               />
             </CardContent>
           </Card>
@@ -107,6 +120,7 @@ const Index = () => {
         onOpenChange={setConfirmDialogOpen}
         type={emergencyType || "police"}
         onConfirm={handleEmergencyConfirm}
+        isLoading={isLoading}
       />
     </div>
   );
